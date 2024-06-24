@@ -1,0 +1,19 @@
+---
+- hosts: all                    # Defines the hosts or group of hosts the playbook will run against
+  become: true                  # Enables privilege escalation (sudo) to execute tasks as root
+  
+  tasks:                        # List of tasks to be executed on the hosts
+    - name: Install apache httpd # Descriptive name for the task
+      ansible.builtin.apt:      # Ansible module to manage packages on Debian-based systems
+        name: apache2           # Name of the package to be installed
+        state: present          # Ensure the package is present
+        update_cache: yes       # Update the package cache before installing (apt-get update)
+
+    - name: Copy file with owner and permissions # Descriptive name for the task
+      ansible.builtin.copy:     # Ansible module to copy files
+        src: index.html         # Source file to be copied from the Ansible control node
+        dest: /var/www/html     # Destination path on the remote host where the file will be copied
+        owner: root             # Set the owner of the copied file to 'root'
+        group: root             # Set the group of the copied file to 'root'
+        mode: '0644'            # Set the permissions (chmod) of the copied file to read/write for owner, read for group and others
+
